@@ -36,6 +36,7 @@ jobs:
     outputs:
       target-working-directory: ${{ steps.decision.outputs.working-directory }}
     steps:
+      - uses: actions/checkout@v4.1.2
       - name: Decision aaa
         id: decision
         if: ${{ needs.changes.outputs.aaa == 'true' }}

@@ -58,5 +58,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.2
       # aaaa
-      - name: step-test
-      run: echo "${{ needs.decision-working-directory.outputs.target-working-directory }}"
+      # - name: step-test
+      # run: echo "${{ needs.decision-working-directory.outputs.target-working-directory }}"

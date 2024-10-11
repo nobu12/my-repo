@@ -43,7 +43,7 @@ jobs:
         if: ${{ needs.changes.outputs.aaa == 'true' }}
         run: echo "working-directory=app/lambda/aaa" >> $GITHUB_OUTPUT
 
-  decision-working-directory:
+  decision-working-directory2:
     name: Decision Working Directory
     needs: decision-working-directory1
     runs-on: ubuntu-latest

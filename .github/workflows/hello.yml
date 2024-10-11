@@ -57,7 +57,7 @@ jobs:
 
   deploy:
     name: deploy_job_name
-    needs: decision-working-directory
+    needs: decision-working-directory2
     runs-on: ubuntu-latest
     defaults:
       run:

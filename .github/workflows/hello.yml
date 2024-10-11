@@ -19,6 +19,7 @@ jobs:
       aaa: ${{ steps.filter.outputs.aaa }}
       bbb: ${{ steps.filter.outputs.bbb }}
     steps:
+      - uses: actions/checkout@v4.1.2
       - uses: dorny/paths-filter@v3
         name: Paths Filter
         id: filter

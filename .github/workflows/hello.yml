@@ -75,5 +75,5 @@ jobs:
       - name: Decision bbb
         if: ${{ needs.changes.outputs.bbb == 'true' }}
         run: cd bbb
-      - name: Decision bbb
+      - name: Decision ccc
         run: pwd

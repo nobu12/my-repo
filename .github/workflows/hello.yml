@@ -56,8 +56,8 @@ jobs:
   #       if: ${{ needs.changes.outputs.bbb == 'true' }}
   #       run: echo "working-directory=app/lambda/bbb" >> $GITHUB_OUTPUT
 
-  deploy:
-    name: deploy_job_name
+  change_dir:
+    name: change_dir
     needs: changes
     runs-on: ubuntu-latest
     defaults:
@@ -66,14 +66,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4.1.2
-      # aaaa
-      # - name: step-test
-      # run: echo "${{ needs.decision-working-directory.outputs.target-working-directory }}"
       - name: Decision aaa
         if: ${{ needs.changes.outputs.aaa == 'true' }}
         run: cd bbb
       - name: Decision bbb
         if: ${{ needs.changes.outputs.bbb == 'true' }}
         run: cd bbb
+
+  deploy:
+    name: deploy_job_name
+    needs: change_dir
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.1.2
+      # aaaa
+      # - name: step-test
+      # run: echo "${{ needs.decision-working-directory.outputs.target-working-directory }}"
       - name: Decision bbb
         run: pwd

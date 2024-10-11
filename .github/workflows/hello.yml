@@ -29,7 +29,7 @@ jobs:
             bbb:
               - "app/bbb/**"
 
-  decision-working-directory:
+  decision-working-directory1:
     name: Decision Working Directory
     needs: changes
     runs-on: ubuntu-latest
@@ -41,7 +41,15 @@ jobs:
         id: decision
         if: ${{ needs.changes.outputs.aaa == 'true' }}
         run: echo "working-directory=app/lambda/aaa" >> $GITHUB_OUTPUT
-      # aaa
+
+  decision-working-directory2:
+    name: Decision Working Directory
+    needs: decision-working-directory1
+    runs-on: ubuntu-latest
+    outputs:
+      target-working-directory: ${{ steps.decision.outputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4.1.2
       - name: Decision bbb
         id: decision
         if: ${{ needs.changes.outputs.bbb == 'true' }}

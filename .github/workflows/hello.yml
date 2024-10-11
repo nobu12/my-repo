@@ -30,39 +30,36 @@ jobs:
             bbb:
               - "app/bbb/**"
 
-  # decision-working-directory1:
-  #   name: Decision Working Directory
-  #   needs: changes
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     target-working-directory: ${{ steps.decision.outputs.working-directory }}
-  #   steps:
-  #     - uses: actions/checkout@v4.1.2
-  #     - name: Decision aaa
-  #       id: decision
-  #       if: ${{ needs.changes.outputs.aaa == 'true' }}
-  #       run: echo "working-directory=app/lambda/aaa" >> $GITHUB_OUTPUT
+  decision-working-directory1:
+    name: Decision Working Directory
+    needs: changes
+    runs-on: ubuntu-latest
+    outputs:
+      target-working-directory: ${{ steps.decision.outputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4.1.2
+      - name: Decision aaa
+        id: decision
+        if: ${{ needs.changes.outputs.aaa == 'true' }}
+        run: echo "working-directory=app/lambda/aaa" >> $GITHUB_OUTPUT
 
-  # decision-working-directory2:
-  #   name: Decision Working Directory
-  #   needs: decision-working-directory1
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     target-working-directory: ${{ steps.decision.outputs.working-directory }}
-  #   steps:
-  #     - uses: actions/checkout@v4.1.2
-  #     - name: Decision bbb
-  #       id: decision
-  #       if: ${{ needs.changes.outputs.bbb == 'true' }}
-  #       run: echo "working-directory=app/lambda/bbb" >> $GITHUB_OUTPUT
+  decision-working-directory:
+    name: Decision Working Directory
+    needs: decision-working-directory1
+    runs-on: ubuntu-latest
+    outputs:
+      target-working-directory: ${{ steps.decision.outputs.working-directory }}
+    steps:
+      - uses: actions/checkout@v4.1.2
+      - name: Decision bbb
+        id: decision
+        if: ${{ needs.changes.outputs.bbb == 'true' }}
+        run: echo "working-directory=app/lambda/bbb" >> $GITHUB_OUTPUT
 
   deploy:
     name: deploy_job_name
-    needs: changes
+    needs: decision-working-directory2
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app
 
     steps:
       - uses: actions/checkout@v4.1.2
@@ -70,10 +67,11 @@ jobs:
       # - name: step-test
       # run: echo "${{ needs.decision-working-directory.outputs.target-working-directory }}"
       - name: Decision aaa
-        if: ${{ needs.changes.outputs.aaa == 'true' }}
-        run: cd aaa
+        working-directory: ${{ needs.decision-working-directory.outputs.target-working-directory }}
+        run: pwd
       - name: Decision bbb
-        if: ${{ needs.changes.outputs.bbb == 'true' }}
-        run: cd bbb
+        working-directory: ${{ needs.decision-working-directory.outputs.target-working-directory }}
+        run: pwd
       - name: Decision ccc
+        working-directory: ${{ needs.decision-working-directory.outputs.target-working-directory }}
         run: pwd

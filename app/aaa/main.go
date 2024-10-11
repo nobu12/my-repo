@@ -5,5 +5,5 @@ import "fmt"
 var version string // ビルド時にldflagsフラグ経由でバージョンを埋め込むための変数
 
 func main() {
-	fmt.Printf("ExampleaAd %s\n", version)
+	fmt.Printf("ExamapleaAd %s\n", version)
 }

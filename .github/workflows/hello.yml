@@ -55,4 +55,5 @@ jobs:
       run:
         working-directory: ${{ needs.decision-working-directory.outputs.target-working-directory }}
     steps:
+      - uses: actions/checkout@v4.1.2
       run: echo "${{ needs.decision-working-directory.outputs.target-working-directory }}"

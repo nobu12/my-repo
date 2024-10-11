@@ -71,9 +71,9 @@ jobs:
       # run: echo "${{ needs.decision-working-directory.outputs.target-working-directory }}"
       - name: Decision aaa
         if: ${{ needs.changes.outputs.aaa == 'true' }}
-        run: cd bbb"
+        run: cd bbb
       - name: Decision bbb
         if: ${{ needs.changes.outputs.bbb == 'true' }}
-        run: "cd bbb"
+        run: cd bbb
       - name: Decision bbb
-        run: "pwd"
+        run: pwd

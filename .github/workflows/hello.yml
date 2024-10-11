@@ -37,12 +37,12 @@ jobs:
       target-working-directory: ${{ steps.decision.outputs.working-directory }}
     steps:
       - name: Decision aaa
-        id: decision-aaa
+        id: decision
         if: ${{ needs.changes.outputs.aaa == 'true' }}
         run: echo "working-directory=app/lambda/aaa" >> $GITHUB_OUTPUT
       # aaa
       - name: Decision bbb
-        id: decision-bbb
+        id: decision
         if: ${{ needs.changes.outputs.bbb == 'true' }}
         run: echo "working-directory=app/lambda/bbb" >> $GITHUB_OUTPUT
 

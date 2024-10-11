@@ -1,8 +1,56 @@
-name: Hello                       # ワークフロー名
-on: push                          # イベント（プッシュ時に起動）
-jobs:                             # ジョブの定義
-  hello:                          # ジョブID
-    runs-on: ubuntu-latest        # ランナー（Ubuntuで実行）
-    steps:                        # ステップの定義
-      - run: echo "Hello, world"  # シェルコマンドの実行
-      - uses: actions/checkout@v4 # アクションの呼び出し
+# aaa・bbbのlambda artifactの生成とデプロイを行うWorkflow
+# developブランチの変更もしくは手動で起動します
+
+name: deploy
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "app/aaa/**"
+      - "app/bbb/**"
+    branches:
+      - main
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      aaa: ${{ steps.filter.outputs.aaa }}
+      bbb: ${{ steps.filter.outputs.bbb }}
+    steps:
+      - uses: dorny/paths-filter@v3
+        name: Paths Filter
+        id: filter
+        with:
+          filters: |
+            aaa:
+              - "app/aaa/**"
+            bbb:
+              - "app/bbb/**"
+
+  decision-working-directory:
+    name: Decision Working Directory
+    needs: changes
+    runs-on: ubuntu-latest
+    outputs:
+      target-working-directory: ${{ steps.decision.outputs.working-directory }}
+    steps:
+      - name: Decision aaa
+        id: decision-aaa
+        if: ${{ needs.changes.outputs.aaa == 'true' }}
+        run: echo "working-directory=app/lambda/aaa" >> $GITHUB_OUTPUT
+      - name: Decision bbb
+        id: decision-bbb
+        if: ${{ needs.changes.outputs.bbb == 'true' }}
+        run: echo "working-directory=app/lambda/bbb" >> $GITHUB_OUTPUT
+
+  deploy:
+    name: deploy_job_name
+    needs: decision-working-directory
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ needs.decision-working-directory.outputs.target-working-directory }}
+    steps:
+      run: echo "${{ needs.decision-working-directory.outputs.target-working-directory }}"

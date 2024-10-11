@@ -53,8 +53,10 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: app/aaa
+        working-directory: ${{ needs.decision-working-directory.outputs.target-working-directory }}
 
     steps:
       - uses: actions/checkout@v4.1.2
+      # aaaa
+      - name: step-test
       run: echo "${{ needs.decision-working-directory.outputs.target-working-directory }}"
